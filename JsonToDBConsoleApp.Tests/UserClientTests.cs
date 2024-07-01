@@ -2,8 +2,6 @@
 using JsonToDBConsoleApp.DTOs;
 using Moq;
 using Moq.Protected;
-using System;
-using System.Collections.Generic;
 using System.Net;
 using System.Net.Http.Json;
 
@@ -44,8 +42,7 @@ namespace JsonToDBConsoleApp.Tests
 
             // Assert
             Assert.NotNull(result);
-            Assert.Equal(expectedUsers.Count, result.Count);
-            Assert.Equal(expectedUsers[0].Name, result[0].Name);
+            Assert.Equivalent(expectedUsers, result);
         }
     }
 }
