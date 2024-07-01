@@ -7,22 +7,6 @@ namespace JsonToDBConsoleApp.Services
 {
     public class UserService
     {
-        public async Task<List<UserDto>?> GetUsersFromUrl(string url)
-        {
-            try
-            {
-                using var httpClient = new HttpClient();
-
-                return await httpClient.GetFromJsonAsync<List<UserDto>>(url);
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine($"Error fetching users from URL: {e.Message}");
-
-                return null;
-            }
-        }
-
         public async Task InsertUsersToDb(List<UserDto> userDtos)
         {
             try

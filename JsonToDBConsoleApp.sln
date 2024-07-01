@@ -5,6 +5,8 @@ VisualStudioVersion = 25.0.1706.12
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JsonToDBConsoleApp", "JsonToDBConsoleApp\JsonToDBConsoleApp.csproj", "{382DF9A3-DBE0-4382-8812-6C3033A383E7}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JsonToDBConsoleApp.Tests", "JsonToDBConsoleApp.Tests\JsonToDBConsoleApp.Tests.csproj", "{C65941EC-11DB-4CAF-944E-330F42FE2653}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,10 @@ Global
 		{382DF9A3-DBE0-4382-8812-6C3033A383E7}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{382DF9A3-DBE0-4382-8812-6C3033A383E7}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{382DF9A3-DBE0-4382-8812-6C3033A383E7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C65941EC-11DB-4CAF-944E-330F42FE2653}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C65941EC-11DB-4CAF-944E-330F42FE2653}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C65941EC-11DB-4CAF-944E-330F42FE2653}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C65941EC-11DB-4CAF-944E-330F42FE2653}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -1,5 +1,6 @@
-﻿using System;
+﻿using JsonToDBConsoleApp.Clients;
 using JsonToDBConsoleApp.Services;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace JsonToDBConsoleApp
 {
@@ -7,14 +8,16 @@ namespace JsonToDBConsoleApp
     {
         static async Task Main(string[] args)
         {
-            const string url = "https://microsoftedge.github.io/Demos/json-dummy-data/64KB.json";
-
             try
             {
                 await EnsureDatabaseCreatedAsync();
 
-                var userService = new UserService();
-                var users = await userService.GetUsersFromUrl(url);
+                var services = new ServiceCollection();
+                services.AddHttpClient<UserClient>();
+                var serviceProvider = services.BuildServiceProvider();
+
+                var userClient = serviceProvider.GetRequiredService<UserClient>();
+                var users = await userClient.GetUsers();
 
                 if (users == null || users.Count <= 0)
                 {
@@ -22,6 +25,7 @@ namespace JsonToDBConsoleApp
                     return;
                 }
 
+                var userService = new UserService();
                 await userService.InsertUsersToDb(users);
                 await userService.OutputUsersFromDb();
             }
