@@ -11,7 +11,7 @@ namespace JsonToDBConsoleApp.Services
         {
             try
             {
-                AppDbContext context = new AppDbContext();
+                using AppDbContext context = new AppDbContext();
                 HashSet<string> existingUserIds = new HashSet<string>(context.Users.Select(u => u.Id));
 
                 foreach (UserDto dto in userDtos)
