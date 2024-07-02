@@ -5,7 +5,7 @@
 namespace JsonToDBConsoleApp.Migrations
 {
     /// <inheritdoc />
-    public partial class InitialCreateAndCreateUserstable : Migration
+    public partial class InitialCreateAndCreateUserTable : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)

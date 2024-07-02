@@ -11,8 +11,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace JsonToDBConsoleApp.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20240701200014_InitialCreateAndCreateUserstable")]
-    partial class InitialCreateAndCreateUserstable
+    [Migration("20240702183753_InitialCreateAndCreateUserTable")]
+    partial class InitialCreateAndCreateUserTable
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

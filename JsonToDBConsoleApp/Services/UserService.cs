@@ -1,5 +1,4 @@
 ﻿using JsonToDBConsoleApp.DTOs;
-using System.Net.Http.Json;
 using JsonToDBConsoleApp.Models;
 using Microsoft.EntityFrameworkCore;
 
@@ -20,7 +19,7 @@ namespace JsonToDBConsoleApp.Services
 
                 foreach (var dto in userDtos)
                 {
-                    if (dto.Id != null && existingUsersDictionary.ContainsKey(dto.Id))
+                    if (dto.Id == null || existingUsersDictionary.ContainsKey(dto?.Id))
                     {
                         Console.WriteLine($"User ID {dto.Id} exists or null. Skipping insertion...");
                     }
