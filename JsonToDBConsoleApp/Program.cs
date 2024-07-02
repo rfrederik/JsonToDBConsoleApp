@@ -1,4 +1,5 @@
 ﻿using JsonToDBConsoleApp.Clients;
+using JsonToDBConsoleApp.DTOs;
 using JsonToDBConsoleApp.Services;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -12,12 +13,12 @@ namespace JsonToDBConsoleApp
             {
                 await EnsureDatabaseCreatedAsync();
 
-                var services = new ServiceCollection();
+                ServiceCollection services = new ServiceCollection();
                 services.AddHttpClient<UserClient>();
-                var serviceProvider = services.BuildServiceProvider();
+                ServiceProvider serviceProvider = services.BuildServiceProvider();
 
-                var userClient = serviceProvider.GetRequiredService<UserClient>();
-                var users = await userClient.GetUsers();
+                UserClient userClient = serviceProvider.GetRequiredService<UserClient>();
+                List<UserDto>? users = await userClient.GetUsers();
 
                 if (users == null || users.Count <= 0)
                 {
@@ -25,7 +26,7 @@ namespace JsonToDBConsoleApp
                     return;
                 }
 
-                var userService = new UserService();
+                UserService userService = new UserService();
                 await userService.InsertUsersToDb(users);
                 await userService.OutputUsersFromDb();
             }
@@ -37,7 +38,7 @@ namespace JsonToDBConsoleApp
 
         private static async Task EnsureDatabaseCreatedAsync()
         {
-            using var context = new AppDbContext();
+            using AppDbContext context = new AppDbContext();
             await context.Database.EnsureCreatedAsync();
         }
     }

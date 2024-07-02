@@ -1,4 +1,5 @@
-﻿using JsonToDBConsoleApp.DTOs;
+﻿using System.Text;
+using JsonToDBConsoleApp.DTOs;
 using JsonToDBConsoleApp.Models;
 using Microsoft.EntityFrameworkCore;
 
@@ -10,34 +11,29 @@ namespace JsonToDBConsoleApp.Services
         {
             try
             {
-                using var context = new AppDbContext();
+                AppDbContext context = new AppDbContext();
+                HashSet<string> existingUserIds = new HashSet<string>(context.Users.Select(u => u.Id));
 
-                var incomingUserIds = userDtos.Select(u => u.Id).ToList();
-                var existingUsersDictionary = await context.Users
-                    .Where(u => incomingUserIds.Contains(u.Id))
-                    .ToDictionaryAsync(u => u.Id!);
-
-                foreach (var dto in userDtos)
+                foreach (UserDto dto in userDtos)
                 {
-                    if (dto == null || dto.Id == null || existingUsersDictionary.ContainsKey(dto.Id))
+                    if (dto?.Id == null || existingUserIds.Contains(dto.Id))
                     {
                         Console.WriteLine($"User ID {dto?.Id} exists or null. Skipping insertion...");
+                        continue;
                     }
-                    else
-                    {
-                        var nameParts = dto?.Name?.Split(' ', 2);
-                        var user = new User
-                        {
-                            Id = dto.Id,
-                            FirstName = nameParts?[0],
-                            LastName = nameParts?.Length > 1 ? nameParts[1] : "",
-                            Bio = dto?.Bio,
-                            Language = dto?.Language,
-                            Version = dto?.Version
-                        };
 
-                        context.Users.Add(user);
-                    }
+                    string[]? nameParts = dto?.Name?.Split(' ', 2);
+                    User user = new User
+                    {
+                        Id = dto.Id,
+                        FirstName = nameParts?[0],
+                        LastName = nameParts?.Length > 1 ? nameParts[1] : "",
+                        Bio = dto?.Bio,
+                        Language = dto?.Language,
+                        Version = dto?.Version
+                    };
+
+                    context.Users.Add(user);
                 }
 
                 await context.SaveChangesAsync();
@@ -52,20 +48,22 @@ namespace JsonToDBConsoleApp.Services
         {
             try
             {
-                using var context = new AppDbContext();
-                var users = await context.Users
+                using AppDbContext context = new AppDbContext();
+                List<User> users = await context.Users
                     .OrderBy(u => u.LastName)
                     .ThenBy(u => u.FirstName)
                     .ToListAsync();
 
-                foreach (var user in users)
+                foreach (User user in users)
                 {
-                    if (user is null)
-                    {
-                        continue;
-                    }
+                    StringBuilder sb = new StringBuilder();
+                    sb.AppendLine($"{user.FirstName} {user.LastName}");
+                    sb.AppendLine(user.Id);
+                    sb.AppendLine(user.Bio);
+                    sb.AppendLine(user.Language);
+                    sb.AppendLine(user.Version.ToString());
 
-                    Console.WriteLine($"{user.FirstName} {user.LastName} {user.Id} {user.Bio} {user.Language} {user.Version}");
+                    Console.WriteLine(sb);
                 }
             }
             catch (Exception e)
