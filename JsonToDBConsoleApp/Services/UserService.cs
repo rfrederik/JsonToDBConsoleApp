@@ -19,16 +19,16 @@ namespace JsonToDBConsoleApp.Services
 
                 foreach (var dto in userDtos)
                 {
-                    if (dto.Id == null || existingUsersDictionary.ContainsKey(dto?.Id))
+                    if (dto == null || dto.Id == null || existingUsersDictionary.ContainsKey(dto.Id))
                     {
-                        Console.WriteLine($"User ID {dto.Id} exists or null. Skipping insertion...");
+                        Console.WriteLine($"User ID {dto?.Id} exists or null. Skipping insertion...");
                     }
                     else
                     {
                         var nameParts = dto?.Name?.Split(' ', 2);
                         var user = new User
                         {
-                            Id = dto?.Id,
+                            Id = dto.Id,
                             FirstName = nameParts?[0],
                             LastName = nameParts?.Length > 1 ? nameParts[1] : "",
                             Bio = dto?.Bio,
