@@ -11,32 +11,34 @@ namespace JsonToDBConsoleApp.Services
         {
             try
             {
-                using AppDbContext context = new AppDbContext();
-                HashSet<string> existingUserIds = new HashSet<string>(context.Users.Select(u => u.Id));
-
-                foreach (UserDto dto in userDtos)
+                using (AppDbContext context = new AppDbContext())
                 {
-                    if (dto?.Id == null || existingUserIds.Contains(dto.Id))
+                    HashSet<string> existingUserIds = new HashSet<string>(context.Users.Select(u => u.Id));
+
+                    foreach (UserDto dto in userDtos)
                     {
-                        Console.WriteLine($"User ID {dto?.Id} exists or null. Skipping insertion...");
-                        continue;
+                        if (dto?.Id == null || existingUserIds.Contains(dto.Id))
+                        {
+                            Console.WriteLine($"User ID {dto?.Id} exists or null. Skipping insertion...");
+                            continue;
+                        }
+
+                        string[]? nameParts = dto?.Name?.Split(' ', 2);
+                        User user = new User
+                        {
+                            Id = dto.Id,
+                            FirstName = nameParts?[0],
+                            LastName = nameParts?.Length > 1 ? nameParts[1] : "",
+                            Bio = dto?.Bio,
+                            Language = dto?.Language,
+                            Version = dto?.Version
+                        };
+
+                        context.Users.Add(user);
                     }
 
-                    string[]? nameParts = dto?.Name?.Split(' ', 2);
-                    User user = new User
-                    {
-                        Id = dto.Id,
-                        FirstName = nameParts?[0],
-                        LastName = nameParts?.Length > 1 ? nameParts[1] : "",
-                        Bio = dto?.Bio,
-                        Language = dto?.Language,
-                        Version = dto?.Version
-                    };
-
-                    context.Users.Add(user);
+                    await context.SaveChangesAsync();
                 }
-
-                await context.SaveChangesAsync();
             }
             catch (Exception e)
             {
@@ -48,22 +50,24 @@ namespace JsonToDBConsoleApp.Services
         {
             try
             {
-                using AppDbContext context = new AppDbContext();
-                List<User> users = await context.Users
+                using (AppDbContext context = new AppDbContext())
+                {
+                    List<User> users = await context.Users
                     .OrderBy(u => u.LastName)
                     .ThenBy(u => u.FirstName)
                     .ToListAsync();
 
-                foreach (User user in users)
-                {
-                    StringBuilder sb = new StringBuilder();
-                    sb.AppendLine($"{user.FirstName} {user.LastName}");
-                    sb.AppendLine(user.Id);
-                    sb.AppendLine(user.Bio);
-                    sb.AppendLine(user.Language);
-                    sb.AppendLine(user.Version.ToString());
+                    foreach (User user in users)
+                    {
+                        StringBuilder sb = new StringBuilder();
+                        sb.AppendLine($"{user.FirstName} {user.LastName}");
+                        sb.AppendLine(user.Id);
+                        sb.AppendLine(user.Bio);
+                        sb.AppendLine(user.Language);
+                        sb.AppendLine(user.Version.ToString());
 
-                    Console.WriteLine(sb);
+                        Console.WriteLine(sb);
+                    }
                 }
             }
             catch (Exception e)
